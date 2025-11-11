@@ -60,7 +60,7 @@ def import_timeseries(api_host, api2_host, api_key, api_secret, workflow_instanc
     log.info(f"workflow_instance_id={workflow_instance.id} fetched workflow instance with dataset_id={workflow_instance.dataset_id} and package_ids={workflow_instance.package_ids}")
     package_id = None
     for pkg in workflow_instance.package_ids:
-        url = f"https://api.pennsieve.io/packages/{pkg}?include=1&includeAncestors=true&startAtEpoch=false&limit=100&offset=0&api_key={api_key}"
+        url = f"{api_host}/packages/{pkg}?include=1&includeAncestors=true&startAtEpoch=false&limit=100&offset=0&api_key={api_key}"
         headers = {"accept": "*/*"}
         response = requests.get(url, headers=headers)
         response.raise_for_status()
