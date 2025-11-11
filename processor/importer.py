@@ -58,8 +58,19 @@ def import_timeseries(api_host, api2_host, api_key, api_secret, workflow_instanc
     # constraint until we implement (upstream) performing imports over directories
     # and specifying how to group time series files together into an imported package
     log.info(f"workflow_instance_id={workflow_instance.id} fetched workflow instance with dataset_id={workflow_instance.dataset_id} and package_ids={workflow_instance.package_ids}")
-    assert len(workflow_instance.package_ids) == 1, "NWB post processor only supports a single package for import"
-    package_id = workflow_instance.package_ids[0]
+    package_id = None
+    for pkg in workflow_instance.package_ids:
+        url = f"https://api.pennsieve.io/packages/{pkg}?include=1&includeAncestors=true&startAtEpoch=false&limit=100&offset=0&api_key={api_key}"
+        headers = {"accept": "*/*"}
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        response_json = response.json()
+        if response_json.get("name").endswith("bdf"):
+           package_id = pkg 
+
+    log.info(f"workflow_instance_id={workflow_instance.id} package_id={pkg}")
+    
+    # package_id = workflow_instance.package_ids[0]
 
     log.info(f"dataset_id={workflow_instance.dataset_id} package_id={package_id} starting import of time series files")
 
