@@ -27,7 +27,7 @@ if __name__ == "__main__":
         print(f"All files in INPUT_DIR: {all_files}")
 
         all_files_output = [f.name for f in os.scandir(config.OUTPUT_DIR) if f.is_file()]
-        print(f"All files in INPUT_DIR: {all_files_output}")
+        print(f"All files in OUTPUT_DIR: {all_files_output}")
         
     except Exception as e:
         print(f"Error scanning INPUT_DIR: {e}")
