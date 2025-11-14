@@ -30,7 +30,6 @@ if __name__ == "__main__":
     ]
     print(input_files)
 
-    assert len(input_files) == 1, "BDF post processor only supports a single file as input"
 
     with pyedflib.EdfReader(input_files[0]) as edf:
 
