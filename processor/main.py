@@ -19,6 +19,15 @@ log = logging.getLogger()
 if __name__ == "__main__":
     config = Config()
 
+    print(f"config.INPUT_DIR: {config.INPUT_DIR}")
+
+    # Debug: list all files in INPUT_DIR
+    try:
+        all_files = [f.name for f in os.scandir(config.INPUT_DIR) if f.is_file()]
+        print(f"All files in INPUT_DIR: {all_files}")
+    except Exception as e:
+        print(f"Error scanning INPUT_DIR: {e}")
+
     bytes_per_mb = pow(2, 20)
     bytes_per_sample = 8 # 64-bit floating point value
     chunk_size = int(config.CHUNK_SIZE_MB * bytes_per_mb / bytes_per_sample)
@@ -28,7 +37,7 @@ if __name__ == "__main__":
         for f in os.scandir(config.INPUT_DIR)
         if f.is_file() and os.path.splitext(f.name)[1].lower() == '.bdf'
     ]
-    print(input_files)
+    print(f"BDF input_files: {input_files}")
 
 
     with pyedflib.EdfReader(input_files[0]) as edf:
