@@ -121,6 +121,13 @@ def processEvent(eventHex):
     annotations = chunkAnnotations(eventHex,ANNOTATION_SIZE)
     annotation_details = []
     for annotation in annotations:
+        print(f"Annotation: {annotation}")
+
+        # Skip empty annotations (all whitespace bytes)
+        if all(word.strip() == b'' for word in annotation):
+            print("Skipping empty annotation")
+            continue
+
         events = {}
         little_endian_annotation = convertToLittleEndian(annotation)
         events.update(getEventPhoticSimulation(little_endian_annotation[0]))
@@ -129,7 +136,7 @@ def processEvent(eventHex):
         dateTimeDetails= parseTimeDetails(little_endian_annotation[2])
         events.update(dateTimeDetails)
         annotation_details.append(events)
-        print(events)
+        print(f"Event: {events}")
     
     return annotation_details
 
