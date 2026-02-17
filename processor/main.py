@@ -47,5 +47,5 @@ if __name__ == "__main__":
     # note: this will be moved to a separated post-processor once the analysis pipeline is more
     # easily able to handle > 3 processors
     if config.IMPORTER_ENABLED:
-        importer = import_timeseries(config.API_HOST, config.API_HOST2, config.API_KEY, config.API_SECRET, config.WORKFLOW_INSTANCE_ID, config.OUTPUT_DIR)
+        importer = import_timeseries(config.API_HOST, config.API_HOST2, config.SESSION_TOKEN, config.REFRESH_TOKEN, config.WORKFLOW_INSTANCE_ID, config.OUTPUT_DIR)
     extract_annotations()

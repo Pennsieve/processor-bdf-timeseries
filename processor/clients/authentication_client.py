@@ -9,7 +9,7 @@ class AuthenticationClient:
     def __init__(self, api_host):
         self.api_host = api_host
 
-    def authenticate(self, api_key, api_secret):
+    def refresh(self, refresh_token):
         url = f"{self.api_host}/authentication/cognito-config"
 
         try:
@@ -28,9 +28,9 @@ class AuthenticationClient:
             )
 
             login_response = cognito_idp_client.initiate_auth(
-              AuthFlow="USER_PASSWORD_AUTH",
-              AuthParameters={"USERNAME": api_key, "PASSWORD": api_secret},
-              ClientId=cognito_app_client_id,
+                AuthFlow="REFRESH_TOKEN_AUTH",
+                AuthParameters={"REFRESH_TOKEN": refresh_token},
+                ClientId=cognito_app_client_id,
             )
 
             access_token = login_response["AuthenticationResult"]["AccessToken"]
@@ -42,5 +42,5 @@ class AuthenticationClient:
             log.error(f"failed to decode authentication response with error: {e}")
             raise e
         except Exception as e:
-            log.error(f"failed to authenticate with error: {e}")
+            log.error(f"failed to refresh session with error: {e}")
             raise e
