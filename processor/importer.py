@@ -6,7 +6,6 @@ import re
 import requests
 import uuid
 
-from clients import AuthenticationClient, SessionManager
 from clients import ImportClient, ImportFile
 from clients import TimeSeriesClient
 from clients import WorkflowClient, WorkflowInstance
@@ -30,7 +29,7 @@ for import into Pennsieve data ecosystem.
 # easily able to handle > 3 processors
 """
 
-def import_timeseries(api_host, api2_host, session_token, refresh_token, workflow_instance_id, file_directory):
+def import_timeseries(api_host, api2_host, session_manager, workflow_instance_id, file_directory):
     # gather all the time series files from the output directory
     timeseries_data_files = []
     timeseries_channel_files = []
@@ -45,9 +44,6 @@ def import_timeseries(api_host, api2_host, session_token, refresh_token, workflo
     if len(timeseries_channel_files) == 0 or len(timeseries_data_files) == 0:
         log.info("no time series channels or data")
         return None
-
-    authentication_client = AuthenticationClient(api_host)
-    session_manager = SessionManager(session_token, authentication_client, refresh_token)
 
     # fetch workflow instance for parameters (dataset_id, package_id, etc.)
     workflow_client = WorkflowClient(api2_host, session_manager)

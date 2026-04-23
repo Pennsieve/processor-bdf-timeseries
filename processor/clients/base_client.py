@@ -1,24 +1,22 @@
-import requests
 import logging
+
+import requests
 
 log = logging.getLogger()
 
-# encapsulates a shared API session token with optional refresh capability
+
+# encapsulates a shared API session and token refresh
 class SessionManager:
-    def __init__(self, session_token, authentication_client=None, refresh_token=None):
-        self.__session_token = session_token
-        self.authentication_client = authentication_client
-        self.refresh_token = refresh_token
+    def __init__(self, auth_provider):
+        self._auth_provider = auth_provider
 
     @property
     def session_token(self):
-        return self.__session_token
+        return self._auth_provider.get_session_token()
 
     def refresh_session(self):
-        if self.authentication_client and self.refresh_token:
-            self.__session_token = self.authentication_client.refresh(self.refresh_token)
-        else:
-            raise RuntimeError("cannot refresh session: no refresh token available")
+        self._auth_provider.refresh()
+
 
 class BaseClient:
     def __init__(self, session_manager):
@@ -30,8 +28,9 @@ class BaseClient:
                 return func(self, *args, **kwargs)
             except requests.exceptions.HTTPError as e:
                 if e.response.status_code in (401, 403):
-                    log.warning("session expired, attempting token refresh")
+                    log.warning("refreshing session")
                     self.session_manager.refresh_session()
                     return func(self, *args, **kwargs)
                 raise
+
         return wrapper

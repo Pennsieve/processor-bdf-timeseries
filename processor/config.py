@@ -22,6 +22,8 @@ class Config:
 
         self.SESSION_TOKEN        = os.getenv('SESSION_TOKEN')
         self.REFRESH_TOKEN        = os.getenv('REFRESH_TOKEN')
+        self.API_KEY              = os.getenv('PENNSIEVE_API_KEY')
+        self.API_SECRET           = os.getenv('PENNSIEVE_API_SECRET')
         self.API_HOST             = os.getenv('PENNSIEVE_API_HOST', 'https://api.pennsieve.net')
         self.API_HOST2            = os.getenv('PENNSIEVE_API_HOST2', 'https://api2.pennsieve.net')
 

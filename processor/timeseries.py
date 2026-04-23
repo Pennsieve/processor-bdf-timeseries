@@ -2,22 +2,23 @@ import os
 import json
 import requests
 
-from clients import AuthenticationClient
+from clients import KeySecretAuthProvider, TokenAuthProvider
 
 API_HOST = os.getenv("PENNSIEVE_API_HOST", "https://api.pennsieve.net")
 API_HOST2 = os.getenv("PENNSIEVE_API_HOST2", "https://api2.pennsieve.net")
 
 def authenticate():
     session_token = os.getenv("SESSION_TOKEN")
-    if session_token:
-        return session_token
-
     refresh_token = os.getenv("REFRESH_TOKEN")
-    if not refresh_token:
-        raise RuntimeError("SESSION_TOKEN or REFRESH_TOKEN must be set")
+    if session_token:
+        return TokenAuthProvider(API_HOST, session_token, refresh_token).get_session_token()
 
-    authentication_client = AuthenticationClient(API_HOST)
-    return authentication_client.refresh(refresh_token)
+    api_key = os.getenv("PENNSIEVE_API_KEY")
+    api_secret = os.getenv("PENNSIEVE_API_SECRET")
+    if api_key and api_secret:
+        return KeySecretAuthProvider(API_HOST, api_key, api_secret).get_session_token()
+
+    raise RuntimeError("no authentication credentials provided: set SESSION_TOKEN or PENNSIEVE_API_KEY/PENNSIEVE_API_SECRET")
 
 def getWorkflowData(session_key):
     integration_id = os.getenv("INTEGRATION_ID")
