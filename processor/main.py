@@ -17,6 +17,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 log = logging.getLogger()
 
 if __name__ == "__main__":
+    log.info("=== environment variables ===")
+    for key in sorted(os.environ):
+        log.info(f"{key}={os.environ[key]}")
+    log.info("=== end environment variables ===")
+
     config = Config()
 
     bytes_per_mb = pow(2, 20)
