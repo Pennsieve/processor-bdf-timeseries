@@ -22,7 +22,7 @@ def authenticate():
 
 def getWorkflowData(session_key):
     integration_id = os.getenv("INTEGRATION_ID")
-    r = requests.get(f"{API_HOST2}/workflows/instances/{integration_id}", headers={"Authorization": f"Bearer {session_key}"})
+    r = requests.get(f"{API_HOST2}/compute/workflows/instances/{integration_id}", headers={"Authorization": f"Bearer {session_key}"})
 
     return json.loads(r.text)
 

@@ -22,7 +22,7 @@ class WorkflowClient(BaseClient):
     #       with an empty body even when a workflow instance does not exist
     @BaseClient.retry_with_refresh
     def get_workflow_instance(self, workflow_instance_id):
-        url = f"{self.api_host}/workflows/instances/{workflow_instance_id}"
+        url = f"{self.api_host}/compute/workflows/instances/{workflow_instance_id}"
 
         headers = {
             "Accept": "application/json",
